@@ -2,8 +2,10 @@ import wx
 import wx.lib.agw.genericmessagedialog as GMD
 import os
 import cv2
+import numpy as np
 import utils
 import CONST
+import OD_localization
 
 class MyFrame(wx.Frame):
     def __init__(self, parent, id, title):
@@ -19,7 +21,7 @@ class MyFrame(wx.Frame):
         leftPanel.SetBackgroundColour('black')
 
         localize_disc = wx.Button(rightPanel, -1, 'Localize', size=(170, -1))
-        #self.Bind(wx.EVT_BUTTON, self.localize_disc, id=localize_disc.GetId())
+        self.Bind(wx.EVT_BUTTON, self.localize_optic_disc, id=localize_disc.GetId())
 
         leftPanel.SetSizer(vbox)
         hbox.Add(rightPanel, 0, wx.EXPAND | wx.RIGHT, 5)
@@ -33,6 +35,7 @@ class MyFrame(wx.Frame):
         self.FILEPATH = ''
         self.IMAGE_ID = ''
         self.EYE_ORIENT = ''
+        self.IMAGE = []
 
     def createMenu(self):
         menubar = wx.MenuBar()
@@ -98,9 +101,12 @@ class MyFrame(wx.Frame):
         img = wx.Image(filepath, wx.BITMAP_TYPE_ANY)
         self.Width = img.GetWidth()
         self.Height = img.GetHeight()
-        img = utils.onScaleImg(img)
-        self.Image.SetBitmap(wx.BitmapFromImage(img))
+        img_scaled = utils.onScaleImg(img)
+        self.Image.SetBitmap(wx.BitmapFromImage(img_scaled))
         self.Refresh()
+        #image resizing
+        cv2.imwrite(CONST.resized_img_path, utils.resizeImg(self.FILEPATH))
+        print 'Image resized and ready to be processed'
 
     def onSaveImage(self, event):
         filters = 'Image files(*.bmp;*.png;*.jpg;*.jpeg)|*.bmp;*.png;*.jpg;*.jpeg'
@@ -111,6 +117,9 @@ class MyFrame(wx.Frame):
             print filename
             cv2.imwrite(filename, cv2.imread(self.FILEPATH_RESULT))
         dlg.Destroy() # we don't need the dialog any more so we ask it to clean-up
+
+    def localize_optic_disc(self, event):
+        OD_localization.get_optic_disc(self)
 
 class MyApp(wx.App):
     def OnInit(self):
