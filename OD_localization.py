@@ -3,6 +3,7 @@ import CONST
 import preprocessing as pp
 import drawing
 import OD_utils as odu
+import testing
 
 def get_od_point(self, gray_img, start, part, stop, part_end):
     point = pp.getBigRectIntensity(gray_img,start, stop, part, part_end)
@@ -65,4 +66,6 @@ def get_optic_disc(self):
     #Automatic disc localization
     ellipse_axes = choose_optic_disc_size(self, r_comp, img, point)
     print 'OD size was found: center - ({}); axes - {}'.format(point, ellipse_axes)
+
+    testing.get_circle_scan(r_comp, point, ellipse_axes[1])
 
