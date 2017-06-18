@@ -67,5 +67,5 @@ def get_optic_disc(self):
     ellipse_axes = choose_optic_disc_size(self, r_comp, img, point)
     print 'OD size was found: center - ({}); axes - {}'.format(point, ellipse_axes)
 
-    testing.get_circle_scan(r_comp, point, ellipse_axes[1])
+    testing.get_circle_scan(r_comp, point, ellipse_axes[1], self)
 
