@@ -6,6 +6,7 @@ import numpy as np
 import utils
 import CONST
 import OD_localization
+import vessels_localization
 
 class MyFrame(wx.Frame):
     def __init__(self, parent, id, title):
@@ -19,10 +20,18 @@ class MyFrame(wx.Frame):
         img = wx.EmptyImage(CONST.screen_resol_x, CONST.screen_resol_y)
         self.Image = wx.StaticBitmap(leftPanel, wx.ID_ANY, wx.BitmapFromImage(img))
         leftPanel.SetBackgroundColour('black')
+        vbox2 = wx.BoxSizer(wx.VERTICAL)
 
         localize_disc = wx.Button(rightPanel, -1, 'Localize', size=(170, -1))
         self.Bind(wx.EVT_BUTTON, self.localize_optic_disc, id=localize_disc.GetId())
 
+        localize_vessels = wx.Button(rightPanel, -1, 'Vessels', size=(170, -1))
+        self.Bind(wx.EVT_BUTTON, self.localize_vessels, id=localize_vessels.GetId())
+
+        vbox2.Add(localize_disc, 0, wx.LEFT | wx.BOTTOM | wx.TOP, 5)
+        vbox2.Add(localize_vessels, 0, wx.LEFT | wx.BOTTOM | wx.TOP, 5)
+
+        rightPanel.SetSizer(vbox2)
         leftPanel.SetSizer(vbox)
         hbox.Add(rightPanel, 0, wx.EXPAND | wx.RIGHT, 5)
         hbox.Add(leftPanel, 1, wx.EXPAND)
@@ -120,6 +129,9 @@ class MyFrame(wx.Frame):
 
     def localize_optic_disc(self, event):
         OD_localization.get_optic_disc(self)
+
+    def localize_vessels(self, event):
+        vessels_localization.get_vessels(self)
 
 class MyApp(wx.App):
     def OnInit(self):

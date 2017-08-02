@@ -24,6 +24,11 @@ def get_r_component(img):
     cv2.imwrite('r_component.png', r_comp)
     return r_comp
 
+def get_g_comonent(img):
+    g_comp = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+    g_comp = g_comp[:, :, 1] #getting G-component
+    return g_comp
+
 def morphology_open_close(gray):
     closing = gray
     vessel_width = CONST.vessel_width * 2
@@ -37,8 +42,8 @@ def morphology_open_close(gray):
 
 def getBigRectIntensity(img, start, stop, start_height, height):
     integral = cv2.integral(img)
-    rect_x = int(180 / 3) - 1
-    rect_y = int(160 / 3) - 1
+    rect_x = int(CONST.rect_x / CONST.resize) - 1
+    rect_y = int(CONST.rect_y / CONST.resize) - 1
     coord = []
     intensity = []
     for j in range(start + rect_y, stop - rect_y, 1):
@@ -59,3 +64,6 @@ def refresh_minimized_od_field(point, start, part, stop, part_end):
     if point[1] - radius > start:
         start = point[1] - radius
     return start, part, stop, part_end
+
+def adaptive_fuzzy_median_filter(img):
+    return img

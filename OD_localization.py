@@ -64,8 +64,12 @@ def get_optic_disc(self):
     start, part, stop, part_end = pp.refresh_minimized_od_field(point, start, part, stop, part_end)
     drawing.minimized_od_field(img, start, part, stop, part_end, 'refreshed_minimized_od_lines.jpg')
     #Automatic disc localization
-    ellipse_axes = choose_optic_disc_size(self, r_comp, img, point)
-    print 'OD size was found: center - ({}); axes - {}'.format(point, ellipse_axes)
+    '''ellipse_axes = choose_optic_disc_size(self, r_comp, img, point)
+    print 'OD size was found: center - ({}); axes - {}'.format(point, ellipse_axes)'''
 
-    testing.get_circle_scan(r_comp, point, ellipse_axes[1], self)
+    #circle intensities counting
+    #testing.get_circle_scan(r_comp, point, ellipse_axes[1], self)
+
+    #snakes OD localization
+    testing.snakes_localization(img, point, 40)
 
